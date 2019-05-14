@@ -1,7 +1,9 @@
-function PRE_create_cells_struct (p_in,rows)
+function PRE_create_cells_struct (p_in)
 
-C = PRE_read_excel_sheet(p_in.excel_sheet ,'Cells',rows,p_in.numeric_fields,[]);
-P = NLG_PRE_read_and_fill_excel_sheet (p_in,p_in.excel_sheet,'Experiments',rows);
+cell_rows=p_in.cell_rows;
+
+C = PRE_read_excel_sheet(p_in.excel_sheet ,'Cells',cell_rows,p_in.numeric_fields,[]);
+P = NLG_PRE_read_and_fill_excel_sheet (p_in,p_in.excel_sheet,'Experiments',cell_rows);
 
 for ii_cell = 1:length(C)
    day_structs_folder=fullfile(P(1).path_dataout,P(1).year_bat_path,'day_structs');

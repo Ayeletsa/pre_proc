@@ -1,8 +1,17 @@
+%% Parameters to define for pre proc
+%%  1. excel file name:
 p_in.excel_sheet = 'D:\Matlab\pre_proc\BAT2389_inclusion_list.xls';
 %p_in.excel_sheet = 'D:\Matlab\pre_proc\BAT2287_inclusion_list.xls';
 
+%% 2. excel rows for analysis
+p_in.day_rows = 1:18;
+p_in.cell_rows = 1:119;
+
+%% 3. folder names:
 p_in.path_datain = 'D:\Ayelet\Data\2batproj\'; % prefix for all data folders
 p_in.path_dataout = 'D:\Ayelet\Data\Data_Nlg_Proc\'; % prefix for output folders
+
+%% 4. excel file fields:
 p_in.numeric_fields = {'bat','day','reference_channel','TT','depth', ...
     'active_channels','nsessions','use_for_sorting', 'use_for_analysis', ...
     'use_tetrodes','throw_away_times', ...
@@ -11,6 +20,7 @@ p_in.numeric_fields = {'bat','day','reference_channel','TT','depth', ...
 p_in.Nlg_EventStrings=[]; % will be filled automatically later on
 p_in.Nlg_EventTimestamps=[]; % will be filled automatically later on
 
+%% 5. spike detection parametes:
 p_in.library_file_name='D:\Matlab\Spike_detection_proj\Data_for_library\new_lib.mat';
 
 p_in.include_negative_threshold=1; %find also negative events
