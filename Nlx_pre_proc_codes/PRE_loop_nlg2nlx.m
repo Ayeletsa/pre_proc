@@ -1,4 +1,7 @@
 function PRE_loop_nlg2nlx (excel_sheet,sheet,rows)
+%Reads the excel and calls the function bellow for all relevant days in a loop. 
+%It is important to check the ref channel that is updated in the excel
+
 
 [num,txt,raw] = xlsread(excel_sheet,sheet);
 

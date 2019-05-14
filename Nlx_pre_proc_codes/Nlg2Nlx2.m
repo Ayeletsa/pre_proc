@@ -11,7 +11,10 @@ function Nlg2Nlx2(main_dir,post_rec_ref_channel)
 % revised - Didi Omer, June 2015
 %
 
-
+%This is Tamir’s function that Didi revised. This function create nlx files from the nlg files 
+%both for the neural data and the events. 
+%Note that this function will not create nlg files if there is already "nlg" folder for this 
+%day in the relevant path. 
 %% arrange files/folders
 
 % case 1: no nlg and nlx directories
