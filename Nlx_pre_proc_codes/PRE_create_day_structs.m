@@ -1,7 +1,8 @@
 function PRE_create_day_structs (p_in)
 % Function description:
-% create day struct with all the neural data and bsp data
-% For days with audio recordint it can create also audio struct data
+% Creates day struct with all the neural data and bsp data.
+% If there is already a day struct for this day the function will continue to the next day
+% For days with audio recordings it can create also audio struct data
 
 
 excel_sheet=p_in.excel_sheet;
