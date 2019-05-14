@@ -4,13 +4,14 @@ function p = NLG_PRE_get_session_times_Nlg(p)
 %% In Nlg format - for each session - find the corresponding timestamps
 % of its start and end, and update the structure. 
 % Both Nlx and Nlg timestamps are in microseconds(!)
+micro_sec_factor=1e6;
 
 %----------------------------------------------------------------------------------------
 for nses = 1:length(p.S)
     s = p.S(nses);
     
-        start_time = p.Nlg_EventTimestamps(s.events(1))+s.time_offsets_in_seconds(1)*1e6;
-        end_time = p.Nlg_EventTimestamps(s.events(2))+s.time_offsets_in_seconds(2)*1e6;
+        start_time = p.Nlg_EventTimestamps(s.events(1))+s.time_offsets_in_seconds(1)*micro_sec_factor;
+        end_time = p.Nlg_EventTimestamps(s.events(2))+s.time_offsets_in_seconds(2)*micro_sec_factor;
         p.S(nses).start_time = start_time;
         p.S(nses).end_time = end_time;
         
