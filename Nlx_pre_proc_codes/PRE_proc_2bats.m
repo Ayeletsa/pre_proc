@@ -5,7 +5,7 @@ close all
 
 eval ('params_in')
 
-%PRE_create_day_structs (p_in)
+PRE_create_day_structs (p_in)
 
 PRE_create_cells_struct (p_in)
 
