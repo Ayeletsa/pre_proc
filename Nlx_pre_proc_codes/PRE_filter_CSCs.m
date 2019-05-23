@@ -59,7 +59,7 @@ if ~exist(LFP_out_dir,'dir')
         file_IN = fullfile(main_dir_in,'nlx',['CSC' num2str(ii_ch-1) '.ncs']);
         file_OUT = fullfile(LFP_out_dir,['LFP_bat_',bat_id,'_day_',date,'_TT_' num2str(TT) '_ch' num2str(ch_num) '.ncs'])
         
-        Nlx_filter_CSC2(file_IN, file_OUT, t_start_end, filter_params)
+        Nlx_filter_CSC2_tamir(file_IN, file_OUT, t_start_end, filter_params)
     end
     
 else
@@ -72,7 +72,9 @@ end
 
 t_start_end = [];
 clear filter_params
-filter_params.passband  = passband_spikes;
+filter_params.type = 'highpassfir1';
+filter_params.passband  = passband_spikes(1);
+
 filter_params.fwin      = fwin;
 
 spikes_out_dir = fullfile(main_dir_out,'spikes');
@@ -88,7 +90,7 @@ if ~exist(spikes_out_dir,'dir')
         file_IN = fullfile(main_dir_in,'nlx',['CSC' num2str(ii_ch-1) '.ncs']);
         file_OUT = fullfile(spikes_out_dir,['spikes_bat_',bat_id,'_day_',date,'_TT' num2str(TT) '_ch' num2str(ch_num) '.ncs'])
         
-        Nlx_filter_CSC2(file_IN, file_OUT, t_start_end, filter_params)
+        Nlx_filter_CSC2_tamir(file_IN, file_OUT, t_start_end, filter_params)
     end
     
 else
