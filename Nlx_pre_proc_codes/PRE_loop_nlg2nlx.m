@@ -32,7 +32,7 @@ for ii_rec = 1:size(sheet,1)
         return
     end
 
-Nlg2Nlx2(main_dir,ref_channel)
+Nlg2Nlx_tamir(main_dir)
 ii_rec
 end
 
