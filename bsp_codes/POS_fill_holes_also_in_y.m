@@ -8,6 +8,7 @@ function [bsp_full_data_pos,bsp_full_data_ts] = POS_fill_holes_also_in_y(raw_dat
 %remove!
 test_folder='D:\Ayelet\2bat_proj\pre_proc_debugging\pre_procces_improvments\bsp_fill_holes_test\';
 %%
+ figure;
 interpolation_always_TH = (1/3)*10^6; %usec, max hole size for which always do linear interpolation
 max_extrapolation_length = (1/3)*10^6; %usec
 TH_velocity_index = 0.15;
@@ -97,7 +98,7 @@ while hole_i <= length(holes_ind_start)
         bsp_full_data_ts = [bsp_full_data_ts fill_in_ts];
         
         % remove
-        figure;
+       
        plot(fill_in_pos_mat(1,:),fill_in_pos_mat(2,:),'r.')
         hold on;
         plot(raw_data_pos(1,[side1_ind side2_ind]),raw_data_pos(2,[side1_ind side2_ind]),'b.')
@@ -105,7 +106,7 @@ while hole_i <= length(holes_ind_start)
         legend('fill in','original')
         file_name=[test_folder,'hole #',num2str(hole_i),'.jpg'];
         saveas(gcf,file_name)
-        close
+        clf
        
         
         if hole_i<length(holes_ind_start)
@@ -227,7 +228,6 @@ while hole_i <= length(holes_ind_start)
         end
         
          % remove
-        figure;
        plot(fill_in_pos_mat(1,:),fill_in_pos_mat(2,:),'r.')
         hold on;
         plot(raw_data_pos(1,[side1_ind side2_ind]),raw_data_pos(2,[side1_ind side2_ind]),'b.')
@@ -235,7 +235,7 @@ while hole_i <= length(holes_ind_start)
         legend('fill in','original')
         file_name=[test_folder,'hole #',num2str(hole_i),'.jpg'];
         saveas(gcf,file_name)
-        close
+        clf
         
         
         bsp_full_data_pos = [bsp_full_data_pos fill_in_pos_mat]; %change
@@ -287,7 +287,6 @@ while hole_i <= length(holes_ind_start)
                 holes_ind_start(hole_i)+flag_change_hole_i);
         end
           % remove
-        figure;
        plot(fill_in_pos_side1_mat(1,:),fill_in_pos_side1_mat(2,:),'r.')
        plot(fill_in_pos_side2_mat(1,:),fill_in_pos_side2_mat(2,:),'r.')
         hold on;
@@ -296,7 +295,7 @@ while hole_i <= length(holes_ind_start)
         legend('fill in','original')
         file_name=[test_folder,'hole #',num2str(hole_i),'.jpg'];
         saveas(gcf,file_name)
-        close
+        clf
         
         
         bsp_full_data_pos = [bsp_full_data_pos fill_in_pos_mat];
