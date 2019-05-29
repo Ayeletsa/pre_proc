@@ -27,21 +27,21 @@ for ii_rec = 1 : length(day_rows)
     if ~exist(struct_name)
         % 3. filter for spikes and LFP:
         % ------------------------------
-        PRE_filter_CSCs(p)
+      PRE_filter_CSCs(p)
        
         % 4. detect spikes:
         % ------------------------------
-        p = Nlg_detect_spikes_library_first_findpeaks_1(p);
+        p=Nlx_detect_spikes_CSC3(p);
+        %p = Nlg_detect_spikes_library_first_findpeaks_1(p);
        
         % 5. extract BSP data:
         % ------------------------------
 
-        p = BSP_PRE_extract_data (p); %TO DO - add landmarks  + take parameters to the param_in script
+        p = BSP_PRE_PROC_data (p); %TO DO -  take parameters to the param_in script
         
         % 6. sync bsp and nlg data:
         % ------------------------------
-        p = PRE_sync_nlg2bsp(p);
-        
+        p=PRE_sync_bsp_to_nlg(p);        
         % 7. save day struct:
         % ------------------------------
         save(struct_name,'p')
