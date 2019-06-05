@@ -1,28 +1,11 @@
--CheetahRev 5.3.0 
+-CheetahRev 5.3.0
 
--AcqEntName CSC1 
--FileType: CSC 
--RecordSize 1044 
+-AcqEntName CSC1
+-FileType: CSC
+-RecordSize 1044
 
--HardwareSubSystemName AcqSystem1 
--HardwareSubSystemType Cheetah64 
--SamplingFrequency
-
--ADMaxValue 32767 
--ADBitVolts 1.0
-
--NumADChannels 1 
--ADChannel 1
--InputRange 499
--InputInverted True 
--DspLowCutFrequency 0.100000 
--DspLowCutNumTaps 0 
--DspLowCutFilterType DCO 
-
--DspHighCutFrequency 9000.000000 
--DspHighCutNumTaps 32 
--DspHighCutFilterType FIR 
-
--AmpLowCut 300.000000 
--AmpHiCut 6000 
--AmpGain 1
+-SamplingFrequency 32000
+-ADMaxValue 32767
+-InputRange 7000
+-ADBitVolts 0.000001
+-InputInverted True
