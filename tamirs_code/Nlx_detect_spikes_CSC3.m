@@ -18,13 +18,14 @@ date = char (regexp (main_dir,'\d{8}','match'));
 main_dir_out = [p.path_dataout,'\',p.year_bat_path,'\',date];
 dir_IN = fullfile(main_dir_out,'spikes');
 dir_OUT = fullfile(main_dir_out,'\detected_spikes\');
-
+dir_sorting = fullfile(main_dir_out,'\spike_sorting\');
 %% input validation
 
 if exist (dir_OUT,'dir')
     return
 else
     mkdir(dir_OUT)
+    mkdir(dir_sorting)
 end
 
 bat_id = num2str(p.bat);
