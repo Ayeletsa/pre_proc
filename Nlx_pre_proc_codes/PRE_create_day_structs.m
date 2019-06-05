@@ -38,10 +38,10 @@ for ii_rec = 1 : length(day_rows)
         % ------------------------------
 
         p = BSP_PRE_PROC_data (p); %TO DO -  take parameters to the param_in script
-        
-        % 6. sync bsp and nlg data:
-        % ------------------------------
-        p=PRE_sync_bsp_to_nlg(p);        
+%         
+%         % 6. sync bsp and nlg data:
+%         % ------------------------------
+%         p=PRE_sync_bsp_to_nlg(p);        
         % 7. save day struct:
         % ------------------------------
         save(struct_name,'p')
