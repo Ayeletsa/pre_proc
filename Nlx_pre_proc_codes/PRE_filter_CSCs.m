@@ -16,11 +16,8 @@ if exist (main_dir_out,'dir')
 end
 
 %% params
+load(p.filter_params_file_name);
 
-fwin = 2;         % we will run over the data in 2-min windows but save           % Same as we use for filtering ripples
-passband_spikes   = [600 6000];        % Filter for spikes
-passband_LFP      = [0.5 400];         % Filter for LFPs
-LFP_resamlpe_fs     = 2000;
 active_channels = reshape(active_channels',[],1)';
 
 %%
@@ -72,7 +69,7 @@ end
 
 t_start_end = [];
 clear filter_params
-filter_params.type = 'highpassfir1';
+filter_params.type = spikes_filter_type;
 filter_params.passband  = passband_spikes(1);
 
 filter_params.fwin      = fwin;
