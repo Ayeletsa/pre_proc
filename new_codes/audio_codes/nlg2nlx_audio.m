@@ -31,8 +31,8 @@ event_file_name_xlsx = fullfile(main_dir, 'EVENTLOG.csv');
 [NUM,TXT,RAW]=xlsread(event_file_name_xlsx);
 
 % extract recording details from event file header
-file_header_lines = TXT(1:3,1);
-[splitstr] = regexp(file_header_lines{2}, '[;]+', 'split'); % 2nd header row
+file_header_lines = TXT(1,1);
+[splitstr] = regexp(file_header_lines{1}, '[;]+', 'split'); % 2nd header row
 firmware_ver = regexp(splitstr{1}, '\d*[.]\d*','match');
 serial_number = regexp(splitstr{2}, '\d*','match');
 time = regexp(splitstr{3}, '\d*:\d*:\d*','match');
@@ -40,8 +40,8 @@ date = regexp(splitstr{4}, '\d*/\d*/\d*','match');
 % ADC_period_usec = regexp(splitstr{5}, '\d*[.]\d*','match');
 ADC_period_usec = regexp(splitstr{5}, '\d*[.]?\d*','match');
 % ADC_period_usec = regexp(splitstr{5}, '\d*','match');
-[splitstr] = regexp(file_header_lines{3}, '[;]+', 'split'); % 3rd header row
-ADC_resolution_uVolt = regexp(splitstr{1}, '\d*[.]\d*','match');
+%[splitstr] = regexp(file_header_lines{3}, '[;]+', 'split'); % 3rd header row
+ADC_resolution_uVolt = regexp(splitstr{6}, '\d*[.]\d*','match');
 
 ADC_SAMPLE_PERIOD = str2num(cell2mat(ADC_period_usec))/num_channels*1e-6;
 fs =  1/ADC_SAMPLE_PERIOD;

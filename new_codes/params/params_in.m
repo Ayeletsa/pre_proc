@@ -1,5 +1,6 @@
 %% Parameters to define for pre proc
-bat='2336';
+bat='2299';
+number_of_tt=16;
 %% params file names:
 p_in.spikes_params_file_name=['D:\Ayelet\Data\Data_Nlg_Proc\2bat_proj\spike_params_bat_',num2str(bat),'.mat'];
 p_in.bsp_params_file_name=['D:\Ayelet\Data\Data_Nlg_Proc\2bat_proj\bsp_params_bat_',num2str(bat),'.mat'];
@@ -10,10 +11,10 @@ p_in.filter_params_file_name=['D:\Ayelet\Data\Data_Nlg_Proc\2bat_proj\filter_par
 p_in.excel_sheet = ['D:\Matlab\pre_proc\new_codes\inclusion_lists\BAT',num2str(bat),'_inclusion_list.xls'];
 
 %% 2. excel rows for analysis
-p_in.day_rows = 1:6;
-%p_in.day_rows = 1:18;
+%p_in.day_rows = 1:9;
+p_in.day_rows = 1:20;
 
-p_in.cell_rows = [];
+p_in.cell_rows = 1:99;
 
 %% 3. folder names:
 p_in.path_datain = 'D:\Ayelet\Data\2batproj\'; % prefix for all data folders
@@ -32,10 +33,10 @@ p_in.Nlg_EventTimestamps=[]; % will be filled automatically later on
 
 %tamir's params:
 
-p_in.spikes_params.thr =repmat(6,4,4); %check which threshold!
+p_in.spikes_params.thr =6; %check which threshold!
 p_in.spikes_params.lib_corr_thr  = 0.8;
 %p_in.spikes_params.coincidence_window=24;
-p_in.spikes_params.CD_thr =repmat(6,4,4);
+p_in.spikes_params.CD_thr =6;
 p_in.spikes_params.t_start_end = [];
 p_in.spikes_params.thr_type = 'median'; % using median(abs(signal)) * factor
 p_in.spikes_params.lib_spike_shapes = 'D:\Matlab\pre_proc\new_codes\neural_proc_codes\library_of_acceptable_spike_shapes_new.mat';
@@ -50,7 +51,12 @@ p_in.spikes_params.number_of_wires_in_TT=4;
 p_in.spikes_params.min_sep_events = 24;
 p_in.spikes_params.nSamples = 32;
 p_in.spikes_params.AlignSample = 8;
-
+if number_of_tt==16;
+    
+    p_in.spikes_params.CD_n_TT_thr=6;
+else
+    p_in.spikes_params.CD_n_TT_thr=4;
+end
 % save spikes pramas
 params_struct=p_in.spikes_params;
 params_file_name=p_in.spikes_params_file_name;
@@ -63,13 +69,13 @@ save(num2str(params_file_name), '-struct', 'params_struct')
 % p_in.include_negative_threshold=1; %find also negative events
 % p_in.do_coincidence_detection=1;
 % p_in.compare_to_library=1;
-% 
+%
 % p_in.threhold_factor=5; %for voltage threshold (threhold=median*factor)
 % p_in.min_sep_events=15; %min separation between events - ~=500us
 % p_in.r_threshold = 0.9;
 % p_in.coincidence_window=500; % Duration of coincidence-detection window (in microsec) ACROSS tetrodes
 % p_in.thresh_for_coinc=4; %remove if X tetrodes has event in the window
-% 
+%
 % p_in.create_movie=0;
 
 %% 6. filtering parameters

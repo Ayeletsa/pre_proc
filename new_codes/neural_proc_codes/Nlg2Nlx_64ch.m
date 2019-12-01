@@ -24,10 +24,13 @@ Nlx_OutDir = fullfile(main_dir, 'nlx');
 if ~exist(Nlg_InDir,'dir')
     error('NLG input folder does not exist');
 end
+
+if exist(Nlx_OutDir,'dir')
+    return
+end
 if ~exist(Nlx_OutDir,'dir')
     mkdir(main_dir,'nlx')
 end
-
 %% parameters setting
 num_channels = 64;
 data_cnl_ind = [0:63]; % note that this numbering system is of the neurologger which means channels 0-15
@@ -57,16 +60,14 @@ event_file_name_xlsx = fullfile(Nlg_InDir, 'EVENTLOG.csv');
 [NUM,TXT,RAW]=xlsread(event_file_name_xlsx);
 
 % extract recording details from event file header
-file_header_lines = TXT(2,1);
+file_header_lines = TXT(1,1);
 [splitstr] = regexp(file_header_lines{1}, '[;]+', 'split'); % 2nd header row
 firmware_ver = regexp(splitstr{1}, '\d*[.]\d*','match');
 serial_number = regexp(splitstr{2}, '\d*','match');
 time = regexp(splitstr{3}, '\d*:\d*:\d*','match');
 date = regexp(splitstr{4}, '\d*/\d*/\d*','match');
 ADC_period_usec = regexp(splitstr{5}, '\d*','match');
-file_header_lines = TXT(3,1);
-[splitstr] = regexp(file_header_lines{1}, '[;]+', 'split'); % 2nd header row
-ADC_resolution_uVolt = regexp(splitstr{1}, '\d*[.]\d*','match');
+ADC_resolution_uVolt = regexp(splitstr{6}, '\d*[.]\d*','match');
 
 samples_per_block = 512; %64-ch logger
 blocks_per_file = 256; %64-ch logger
@@ -77,16 +78,16 @@ block_period_time_usec = (512/fs) * 1e6;
 digital_data_block_period_time_usec = (512/fs) * 1e6;
 block_period_time_usec_2 = 512 * (ADC_SAMPLE_PERIOD * num_channels) * 1e6;
 % file_len_time_usec = block_period_time_usec*1024; % TODO: calc
-file_len_time_usec = block_period_time_usec*256; 
+file_len_time_usec = block_period_time_usec*256;
 fs_acc = 1e6/(file_len_time_usec / 2048);
 ts_offset_acc_neur_usec = file_len_time_usec / 2048;
 
 %% extract events details
 events_IX = NUM(1:end,1);
 events_TS = NUM(1:end,3).*1e3;
-events_TS_source = TXT(2:end,4);
-events_type = TXT(2:end,5);
-events_details = TXT(2:end,6);
+events_TS_source = TXT(3:end,4);
+events_type = TXT(3:end,5);
+events_details = TXT(3:end,6);
 
 %% join '...Continued' events
 continued_event_lines_IX = find(strcmp(events_type,'...Continued'));
@@ -127,19 +128,17 @@ for i=1:size(events_type,1)
         for i=1:length(paramst)
             if length(paramst{i})>1
                 t = strsplit(paramst{i},' = ');
-                if regexp(t{1},'Unknown')
-                    continue
-                else
+                
                 t1 = t{1};
                 t1= t1(find(~isspace(t1)));
                 if strfind(t1,'-'), t1(find(t1=='-'))='';end
                 if strfind(t1,'/'), t1(find(t1=='/'))='';end
                 t{1} = t1;
                 param.(t1) = t{2};
-                end
+                
             end
         end
-
+        
         % param.ChannelOverwrittenbyMotionSensor = str2double(char(regexp(param.ChannelOverwrittenbyMotionSensor,'(\d*)','match')));
         % param.GyroscopeRangeIndex = str2double(char(regexp(param.GyroscopeRangeIndex,'(\d*)','match')));
         % param.AccelerometerRangeIndex = str2double(char(regexp(param.AccelerometerRangeIndex,'(\d*)','match')));
@@ -276,7 +275,7 @@ for ii_file_start_entry = 1:length(FileStarted_TS)
     else
         file_name = [DATA_file_prefix file_str{1:end} '.DT4'];
     end
-
+    
     fid = fopen(fullfile(Nlg_InDir, file_name));
     filedata = fread(fid, 'uint16', 0, 'l');
     fclose(fid);

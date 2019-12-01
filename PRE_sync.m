@@ -67,6 +67,6 @@ end
 %% sync nlg events if needed:
 if strcmp(p.sync_to,'bsp') && ~isempty(p.S)
     p.S.start_time=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, p.S.start_time*1e3, 'linear','extrap');
-    p.S.end_time=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, p.S.start_end*1e3, 'linear','extrap');
+    p.S.end_time=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, p.S.end_time*1e3, 'linear','extrap');
 
 end

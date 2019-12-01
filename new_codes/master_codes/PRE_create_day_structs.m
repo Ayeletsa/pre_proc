@@ -32,7 +32,12 @@ for ii_rec = 1 : length(day_rows)
         if p.nlg_self
         % 3. filter for spikes and LFP:
         % ------------------------------
-        PRE_filter_CSCs(p) %note this is not synced!
+        if p.microdrive==64
+            PRE_filter_CSCs_64_ch(p)
+        else
+                    PRE_filter_CSCs(p) %note this is not synced!
+
+        end
        
         % 4. detect spikes:
         % ------------------------------

@@ -56,8 +56,9 @@ for run_i=1:length(use_neg_thr_vec)
     %load params:
     
     % add more params:
-    
+    if CD_n_TT_thr==4
     CD_n_TT_thr = length(p.use_tetrodes);
+    end
     ref_ch = p.reference_channel;
     active_TT_channels = p.active_channels;
     TT_to_use = p.use_tetrodes;
@@ -69,9 +70,8 @@ for run_i=1:length(use_neg_thr_vec)
     TT_ch_exist = [];
     for ii_file = 1:length(files_raw)
         file_name = files_raw(ii_file).name;
-        TT_str = regexp(file_name, '_TT([\d+])','tokens','once');
-        TT_str = TT_str{1};
-        TT_num = str2num(TT_str);
+        TT_str = regexp(file_name, '_TT(\d*)_','tokens');
+        TT_num= str2num([TT_str{:}{:}]);
         ch_str = regexp(file_name, '_ch([\d+])','tokens','once');
         ch_str = ch_str{1};
         ch_num = str2num(ch_str);
@@ -237,7 +237,7 @@ for run_i=1:length(use_neg_thr_vec)
         trigger_IX = repmat( [(1-AlignSample):(nSamples-AlignSample)]',1,length(TT_events_IX));
         % IX relative to csc signal
         trigger_IX = trigger_IX + repmat(TT_events_IX,[nSamples 1]);
-        for ch = 1:4
+        for ch = 1:number_of_wires_in_TT
             temp = csc(ch,:); % TODO: how we can add another dimension and avoid this stupid loop and temp...?!
             wvfrms(:,ch,:) = temp(trigger_IX);
         end

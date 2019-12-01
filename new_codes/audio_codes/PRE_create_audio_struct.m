@@ -12,6 +12,7 @@ if ~exist(file_name,'file')
         nlg2nlx_audio(other_dir)
     end
     %2. read the data
+    if p.Audio_dir_self~=0
     Filename=fullfile(self_dir,'audio.ncs');
     [signal, ts, fs] = Nlx_csc_read(Filename,[]);
     p.Aud.self_signal=signal;
@@ -21,6 +22,7 @@ if ~exist(file_name,'file')
     end
     p.Aud.self_ts=ts;
     p.Aud.fs=fs;
+    end
     if p.Audio_dir_other~=0
         Filename=fullfile(other_dir,'audio.ncs');
         [signal, ts, fs] = Nlx_csc_read(Filename,[]);
@@ -29,6 +31,7 @@ if ~exist(file_name,'file')
         end
         p.Aud.other_signal=signal;
         p.Aud.other_ts=ts;
+        p.Aud.fs=fs;
     end
     
 %     % 3. sync to bsp
