@@ -18,7 +18,6 @@ main_dir = p.path_day_dir;
 bsp_dir = fullfile(main_dir,'bsp');
 
 %% 1. extract bsp data from raw recordings data
-bsp_data = bsp_extract_data (bsp_dir);
 % use only wanted tags data and delete the rest because sometimes due to
 % bug there are non relevant tags
 self_other_bsp_tags = [p.bsp_tag_self p.bsp_tag_other];

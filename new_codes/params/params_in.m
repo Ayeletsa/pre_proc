@@ -1,5 +1,5 @@
 %% Parameters to define for pre proc
-bat='2299';
+bat='2336';
 number_of_tt=16;
 %% params file names:
 p_in.spikes_params_file_name=['D:\Ayelet\Data\Data_Nlg_Proc\2bat_proj\spike_params_bat_',num2str(bat),'.mat'];
@@ -12,7 +12,7 @@ p_in.excel_sheet = ['D:\Matlab\pre_proc\new_codes\inclusion_lists\BAT',num2str(b
 
 %% 2. excel rows for analysis
 %p_in.day_rows = 1:9;
-p_in.day_rows = 1:20;
+p_in.day_rows = 1:30;
 
 p_in.cell_rows = 1:99;
 
