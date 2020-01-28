@@ -54,14 +54,18 @@ fs_acc = 1e6/(file_len_time_usec / 2048);
 ts_offset_acc_neur_usec = file_len_time_usec / 2048;
 
 %% extract events details
-events_IX = NUM(1:end,1);
-events_TS = NUM(1:end,3).*1e3;
-events_TS_source = TXT(5:end,4);
-events_type = TXT(5:end,5);
-events_details = TXT(5:end,6);
-
+ind_of_first_event=3;
+events_IX = cell2mat(RAW(ind_of_first_event:end,1));
+events_TS = cell2mat(RAW(ind_of_first_event:end,3)).*1e3;
+events_TS_source = RAW(ind_of_first_event:end,4);
+events_type = RAW(ind_of_first_event:end,5);
+events_details = RAW(ind_of_first_event:end,6);
+if length(events_TS)~=length(events_details)
+    error('event and ts are not in the same length')
+end
 %% join '...Continued' events
-continued_event_lines_IX = find(isnan(events_IX))';
+%continued_event_lines_IX = find(isnan(events_IX))';
+continued_event_lines_IX=find(floor(events_IX)~=events_IX);
 for ii_continued_event_line = continued_event_lines_IX
     % take the last line with a valid number in the event index column as
     % the event index
@@ -131,6 +135,7 @@ if use_clock_diff_correction
         str = curr_event_details(CD_str_pos+3:end);
         CD = str2num(str(1:min(strfind(str,' '))));
         if isempty(CD)
+          
             continue
         end
         CD_values(end+1) = CD;
