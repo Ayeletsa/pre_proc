@@ -1,5 +1,5 @@
 function sync_ts=PRE_sync_x_2_y(TTL_x,TTL_y,x_name,y_name,sync_name,sync_dir)
-
+%
 
 X_TTL_intervals = diff(TTL_x);
 X_TTL_intervals_inc = diff(X_TTL_intervals);
@@ -66,6 +66,7 @@ pnl(1).pack('v',2);
 pnl(2).pack('v',3);
 pnl.margin = 30;
 h=pnl.title(x_name);h.Position = [0.5 1.06]; h.FontSize=16;
+
 
 % plot TTL intervals
 pnl(1,1).select(); hold on;
