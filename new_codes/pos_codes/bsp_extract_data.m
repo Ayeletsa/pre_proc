@@ -57,7 +57,7 @@ for ii_file=1:length(dist_csv_file_names)
     else
         warning('No TTL data in current file, CHECK WHY!!!!')
     end
-    
+    plot(bsp_data(tag_IX).ts_ns,'.')
 end
 
 %% save as mat file
