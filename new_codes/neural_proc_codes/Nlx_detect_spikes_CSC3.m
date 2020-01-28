@@ -13,6 +13,7 @@ function p=Nlx_detect_spikes_CSC3(p)
 main_dir = p.path_day_dir;
 active_TTs = p.use_tetrodes;
 active_channels = p.active_channels;
+TT_with_ripples=p.TT_with_ripples;
 
 date = char (regexp (main_dir,'\d{8}','match'));
 main_dir_out = [p.path_dataout,'\',p.year_bat_path,'\',date];
@@ -410,7 +411,7 @@ for run_i=1:length(use_neg_thr_vec)
     tic
     disp('-------------------------')
     disp('Write results (NTT files)')
-    for TT = TT_to_use
+    for TT = str2num(TT_with_ripples)
         
         % make sure there are data from this TT
         if sum(TT_ch_exist(TT,:)) == 0
