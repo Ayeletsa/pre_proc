@@ -34,7 +34,13 @@ for ii_rec = records % number of records (days) in excel
     
     %Neurologger: Extracting Events, Event Timestamps, and TTL times from the event log of the Nlg
    if p.nlg_self
-    file_name_Event_Nlg=  [ p.path_day_dir '\nlx\'];
+       if p.take_event_from_audio==1
+           file_name_Event_Nlg=  fullfile(p.path_day_dir,p.Audio_dir_other,'\');
+           
+       else
+           
+           file_name_Event_Nlg=  [ p.path_day_dir '\nlx\'];
+       end
     [p.Nlg_EventStrings, p.Nlg_EventTimestamps] = NLG_PRE_read_excel_events_and_TTL(file_name_Event_Nlg);
  
    
