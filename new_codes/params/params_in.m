@@ -17,8 +17,8 @@ p_in.day_rows = 1:30;
 p_in.cell_rows = 1:99;
 
 %% 3. folder names:
-p_in.path_datain = 'D:\Ayelet\Data\2batproj\'; % prefix for all data folders
-p_in.path_dataout = 'D:\Ayelet\Data\Data_Nlg_Proc\'; % prefix for output folders
+p_in.path_datain = 'L:\Data\2batproj\yr_2019_bat_2336\'; % prefix for all data folders
+p_in.path_dataout = 'L:\Data\2batproj\Data_Nlg_Proc\'; % prefix for output folders
 
 %% 4. excel file fields:
 p_in.numeric_fields = {'bat','day','reference_channel','TT','depth', ...
@@ -79,7 +79,7 @@ save(num2str(params_file_name), '-struct', 'params_struct')
 % p_in.create_movie=0;
 
 %% 6. filtering parameters
-
+p_in.filter_params.run_LFP=0;
 p_in.filter_params.fwin = 2;         % we will run over the data in 2-min windows but save           % Same as we use for filtering ripples
 p_in.filter_params.passband_spikes   = [600 6000];        % Filter for spikes
 p_in.filter_params.passband_LFP      = [0.5 400];         % Filter for LFPs
