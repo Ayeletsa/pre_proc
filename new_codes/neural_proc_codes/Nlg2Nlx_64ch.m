@@ -224,8 +224,11 @@ for ii_event = 1:length(PC_gen_events_IX)
     end
     
     BV_values_str_interval = (BV_str_pos:BV_str_pos+4) + length(BV_str);
-    BV_values(end+1) = str2num( curr_event_details(BV_values_str_interval) );
+    bv=str2num( curr_event_details(BV_values_str_interval) );
+    if ~isempty(bv)
+    BV_values(end+1) = bv;
     BV_timestamps(end+1) = events_TS(PC_gen_events_IX(ii_event));
+    end
 end
 usec_2_min = 1/60*1e-6;
 % BV_timestamps = BV_timestamps(4:end);
