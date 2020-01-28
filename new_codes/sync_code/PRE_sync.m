@@ -13,17 +13,17 @@ bsp_TTL_ts_msec=initial_extract_bsp_TTL(bsp_dir);
 
 %b. nlg
 if p.nlg_self
-    nlx_dir =  fullfile(p.path_day_dir, 'nlx');
+    nlx_dir =  fullfile(main_dir, 'nlx');
     nlg_TTL_ts_msec=initial_extract_nlg_TTL(nlx_dir);
 end
 
 %b. aud
 if p.Audio_self
-    aud_self_dir =  fullfile(p.path_day_dir,p.Audio_dir_self);
+    aud_self_dir =  fullfile(main_dir,p.Audio_dir_self);
     aud_self_TTL_ts_msec=initial_extract_nlg_TTL(aud_self_dir);
 end
 if p.Audio_other
-    aud_other_dir =  fullfile(p.path_day_dir,p.Audio_dir_other);
+    aud_other_dir =  fullfile(main_dir,p.Audio_dir_other);
     aud_other_TTL_ts_msec=initial_extract_nlg_TTL(aud_other_dir);
 end
 
@@ -43,7 +43,7 @@ end
 %b. aud
 if p.Audio_self
     TTL_x=aud_self_TTL_ts_msec;
-    x_name='aud_self';
+    x_name='aud__self';
     TTL_y=bsp_TTL_ts_msec;
     y_name='bsp';
     sync_name='sync_bsp_and_aud_self';
@@ -55,7 +55,7 @@ end
 
 if p.Audio_other
     TTL_x=aud_other_TTL_ts_msec;
-    x_name='aud_other';
+    x_name='aud__other';
     TTL_y=bsp_TTL_ts_msec;
     y_name='bsp';
     sync_name='sync_bsp_and_aud_other';
@@ -66,7 +66,8 @@ end
 
 %% sync nlg events if needed:
 if strcmp(p.sync_to,'bsp') && ~isempty(p.S)
-    p.S.start_time=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, p.S.start_time*1e3, 'linear','extrap');
-    p.S.end_time=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, p.S.end_time*1e3, 'linear','extrap');
-
+    start_time=num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.start_time].*1e3, 'linear','extrap'));
+    [p.S.start_time]=start_time{:};
+    end_time=num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.end_time]*1e3, 'linear','extrap'));
+	[p.S.end_time]=end_time{:};
 end
