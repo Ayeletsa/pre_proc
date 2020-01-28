@@ -21,11 +21,11 @@ load(p.filter_params_file_name);
 %active_channels = reshape(active_channels',[],1)';
 
 %%
-p = gcp('nocreate'); % If no pool, do not create new one.
-if isempty(p)
+pool = gcp('nocreate'); % If no pool, do not create new one.
+if isempty(pool)
     poolsize = 0;
 else
-    poolsize = p.NumWorkers;
+    poolsize = pool.NumWorkers;
 end
 if poolsize ~=6  % checking to see if my pool is already open
     parpool(6)
@@ -42,31 +42,31 @@ clear filter_params
 filter_params.passband  = passband_LFP;
 filter_params.fwin      = fwin;
 filter_params.resample_fs = LFP_resamlpe_fs;
-
-LFP_out_dir = fullfile(main_dir_out,'LFP');
-if ~exist(LFP_out_dir,'dir')
-    mkdir(LFP_out_dir)
-    
-    for tt = 1:length(active_channels)
-        channels=active_channels(tt,:);
-        for ii_ch=1:length(channels)
-            if ~channels(ii_ch)
-                continue;
+if run_LFP==1
+    LFP_out_dir = fullfile(main_dir_out,'LFP');
+    if ~exist(LFP_out_dir,'dir')
+        mkdir(LFP_out_dir)
+        
+        for tt = 1:length(active_channels)
+            channels=active_channels(tt,:);
+            parfor ii_ch=1:length(channels)
+                if ~channels(ii_ch)
+                    continue;
+                end
+                %         TT = ceil(ii_ch/4);
+                %         ch_num = mod(ii_ch-1,4)+1;
+                file_IN = fullfile(main_dir_in,'nlx',['CSC_TT' num2str(tt),'_',num2str(ii_ch), '.ncs']);
+                file_OUT = fullfile(LFP_out_dir,['LFP_bat_',bat_id,'_day_',date,'_TT_' num2str(tt) '_ch' num2str(ii_ch) '.ncs']);
+                
+                Nlx_filter_CSC2_tamir(file_IN, file_OUT, t_start_end, filter_params)
             end
-            %         TT = ceil(ii_ch/4);
-            %         ch_num = mod(ii_ch-1,4)+1;
-            file_IN = fullfile(main_dir_in,'nlx',['CSC_TT' num2str(tt),'_',num2str(ii_ch), '.ncs']);
-            file_OUT = fullfile(LFP_out_dir,['LFP_bat_',bat_id,'_day_',date,'_TT_' num2str(tt) '_ch' num2str(ii_ch) '.ncs']);
-            
-            Nlx_filter_CSC2_tamir(file_IN, file_OUT, t_start_end, filter_params)
         end
+    else
+        disp('======================');
+        disp (['Skipping LFP extraction. Already extracted in ' fullfile(main_dir_out,'LFP')]);
+        disp('======================');
     end
-else
-    disp('======================');
-    disp (['Skipping LFP extraction. Already extracted in ' fullfile(main_dir_out,'LFP')]);
-    disp('======================');
 end
-
 %% exctract high-pass for spike detection
 
 t_start_end = [];
@@ -82,15 +82,15 @@ if ~exist(spikes_out_dir,'dir')
     
     for tt = 1:length(active_channels)
         channels=active_channels(tt,:);
-        for ii_ch=1:length(channels)
+        parfor ii_ch=1:length(channels)
             if ~channels(ii_ch)
                 continue;
             end
             file_IN = fullfile(main_dir_in,'nlx',['CSC_TT' num2str(tt),'_',num2str(ii_ch), '.ncs']);
-        file_OUT = fullfile(spikes_out_dir,['spikes_bat_',bat_id,'_day_',date,'_TT' num2str(tt) '_ch' num2str(ii_ch) '.ncs']);
-        
-        Nlx_filter_CSC2_tamir(file_IN, file_OUT, t_start_end, filter_params)
-    end
+            file_OUT = fullfile(spikes_out_dir,['spikes_bat_',bat_id,'_day_',date,'_TT' num2str(tt) '_ch' num2str(ii_ch) '.ncs']);
+            
+            Nlx_filter_CSC2_tamir(file_IN, file_OUT, t_start_end, filter_params)
+        end
     end
 else
     disp('======================');
