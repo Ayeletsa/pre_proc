@@ -140,7 +140,7 @@ while hole_i <= length(holes_ind_start)
     
     %% Velocity conditions:
     flag_change_hole_i = 0;
-    while length(side2_ind)<2 %single sample inside a bigger hole:
+    while length(side2_ind)<2 && side2_ind<=length(raw_data_ts_usec)%single sample inside a bigger hole:
         side2_ind_tmp = [side2_ind (side2_ind+1)];
         ts_side2 = raw_data_ts_usec(side2_ind_tmp);
         if diff(ts_side2) < large_hole_TH
@@ -150,8 +150,22 @@ while hole_i <= length(holes_ind_start)
             side2_ind = holes_ind_end(hole_i+flag_change_hole_i) + ...
                 find(abs(raw_data_ts_usec(holes_ind_end(hole_i+flag_change_hole_i))-...
                 raw_data_ts_usec(holes_ind_start(hole_i)+1:end))<=time_for_fitting_inter);
+         
         end
+          
     end
+    if side2_ind > length(raw_data_ts_usec)
+        % the right side of the hole is the last sample of the data:
+        % there is no way to measure the velocity, and the hole is too big
+        % for interpolation condition - so sk?p it.
+        middle_nans = repmat(fill_in_ts,2,1);
+        middle_nans(:) = nan;
+        
+        bsp_full_data_pos = [bsp_full_data_pos middle_nans];
+        bsp_full_data_ts = [bsp_full_data_ts fill_in_ts];
+        hole_i = hole_i + 1;
+        continue;
+    end 
     
     if flag_change_hole_i %then holes were merged
         holes_ind_end(hole_i) = holes_ind_end(hole_i+flag_change_hole_i);
