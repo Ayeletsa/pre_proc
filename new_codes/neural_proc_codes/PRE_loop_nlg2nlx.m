@@ -8,7 +8,7 @@ function PRE_loop_nlg2nlx (excel_sheet,sheet,rows)
 field_names = txt(1,:);
 nfields = length(field_names);
 ref_channel_ind = find(strcmp(field_names,'reference_channel'));
-path_day_dir_ind = find(strcmp(field_names,'path_day_dir'));
+path_day_dir_ind = strcmp(field_names,'path_day_dir');
 active_channels_ind = find(strcmp(field_names,'active_channels'));
 active_TTs_ind = find(strcmp(field_names,'use_tetrodes'));
 
