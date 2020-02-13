@@ -1,5 +1,5 @@
 function PRE_create_cells_struct (p_in)
-
+isolation_distance_in_min=10;
 cell_rows=p_in.cell_rows;
 exp_rows=p_in.day_rows ;
 C = PRE_read_excel_sheet(p_in.excel_sheet ,'Cells',cell_rows,p_in.numeric_fields,[]);
@@ -90,8 +90,25 @@ for ii_cell = 1:length(C)
     % %         end
     % %         Fet = Create_FeatureSpace(permute(all_spike_samples,[3,2,1]));
     % %         [CluSep, m] = Cluster_Quality_maya(Fet, ind);
-    
+    if isolation_distance_in_min==0
+         
     [L_Ratio,Isolation_dis] = cluster_quality(all_spike_samples,all_spike_ts,Timestamps_usec);
+    else
+        us_iso_dis=isolation_distance_in_min*60*1e6;
+        ts_vec=all_spike_ts(1):us_iso_dis:all_spike_ts(end);
+        if ts_vec(end)~=all_spike_ts(end)
+            ts_vec(end+1)=all_spike_ts(end);
+        end
+        for t_i=1:length(ts_vec)-1
+            relevant_ind_all=find(all_spike_ts>=ts_vec(t_i) & all_spike_ts>=ts_vec(t_i+1));
+            relevant_ind_cell=find(Timestamps_usec>=ts_vec(t_i) & Timestamps_usec>=ts_vec(t_i+1));
+            if ~isempty(relevant_ind_cell)
+            [L_Ratio(t_i),Isolation_dis(t_i)] = cluster_quality(all_spike_samples(:,:,relevant_ind_all),all_spike_ts(relevant_ind_all),Timestamps_usec(relevant_ind_cell));
+            end
+        end
+        L_Ratio=mean(L_Ratio);
+        Isolation_dis=mean(Isolation_dis);
+    end
     %% find relevant timestamps based on cluster stability in the spike sorting
     start_ts=C(ii_cell).start;
     if isempty(start_ts)
