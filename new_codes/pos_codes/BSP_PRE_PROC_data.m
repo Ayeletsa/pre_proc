@@ -34,7 +34,7 @@ for tag_i=1:length(bsp_data)
         bsp_data(tag_i).ts_nlg_usec=bsp_data(tag_i).ts_ns*10^-3; 
     else
         %DEBUG CHECK TS units!
-        bsp_data(tag_i).ts_nlg_usec=interp1(p.sync.bsp_ts_for_sync_with_nlg*1e3, p.sync.nlg_ts_for_sync_with_bsp, bsp_data(tag_i).ts_ns, 'linear','extrap')*10^-3;
+        bsp_data(tag_i).ts_nlg_usec=interp1(p.sync.bsp_ts_for_sync_with_nlg, p.sync.nlg_ts_for_sync_with_bsp, bsp_data(tag_i).ts_ns, 'linear','extrap');
        
     end
     %remove dots that are on the same x value
