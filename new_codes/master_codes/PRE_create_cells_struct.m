@@ -50,7 +50,7 @@ for ii_cell = 1:length(C)
         Nlx2MatSpike( spike_TT_file, FieldSelection, 1, ExtractionMode, ExtractionModeArray ) ;
     %Take only relevant spikes for cell
     if strcmp(p.sync_to,'bsp')
-        Timestamps_usec_sync=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, Timestamps_usec_all*1e3, 'linear','extrap');
+        Timestamps_usec_sync=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, Timestamps_usec_all, 'linear','extrap')/1e3;
     else
         Timestamps_usec_sync=Timestamps_usec_all;
     end
@@ -80,7 +80,7 @@ for ii_cell = 1:length(C)
     
     [all_spike_ts,all_spike_samples] = Nlx2MatSpike(spike_TT_file, [1 0 0 0 1], 0, 1, []);
     if strcmp(p.sync_to,'bsp')
-        all_spike_ts=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, all_spike_ts*1e3, 'linear','extrap');
+        all_spike_ts=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, all_spike_ts, 'linear','extrap')/1e3;
     end
     
     % Maya's way to compute cluster quality (for test)
