@@ -12,9 +12,9 @@ p_in.excel_sheet = ['D:\Matlab\pre_proc\new_codes\inclusion_lists\BAT',num2str(b
 
 %% 2. excel rows for analysis
 %p_in.day_rows = 1:9;
-p_in.day_rows = 1:30;
+p_in.day_rows = 1:9;
 
-p_in.cell_rows = 1:99;
+p_in.cell_rows = 1:95;
 
 %% 3. folder names:
 p_in.path_datain = 'L:\Data\2batproj\yr_2019_bat_2336\'; % prefix for all data folders
@@ -51,12 +51,18 @@ p_in.spikes_params.number_of_wires_in_TT=4;
 p_in.spikes_params.min_sep_events = 24;
 p_in.spikes_params.nSamples = 32;
 p_in.spikes_params.AlignSample = 8;
+p_in.isolation_distance_in_min=10;
+
 if number_of_tt==16;
     
     p_in.spikes_params.CD_n_TT_thr=6;
 else
     p_in.spikes_params.CD_n_TT_thr=4;
 end
+
+
+
+
 % save spikes pramas
 params_struct=p_in.spikes_params;
 params_file_name=p_in.spikes_params_file_name;

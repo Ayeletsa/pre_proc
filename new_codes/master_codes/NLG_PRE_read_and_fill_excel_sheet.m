@@ -1,4 +1,4 @@
-function P = NLG_PRE_read_and_fill_excel_sheet (p_in,excel_sheet,sheet,rows)
+function PP = NLG_PRE_read_and_fill_excel_sheet (p_in,excel_sheet,sheet,rows)
 
 %% Read excel sheet and create parameter structure from it
 
@@ -93,8 +93,6 @@ for ii_rec = records % number of records (days) in excel
     
 end % loops on excel records for display of events  only
 
-P = [];
-P = PP;
-PP = [];
+
 
 end

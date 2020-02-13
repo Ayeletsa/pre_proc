@@ -59,7 +59,7 @@ if p.Audio_other
     TTL_y=bsp_TTL_ts_msec;
     y_name='bsp';
     sync_name='sync_bsp_and_aud_other';
-    sync_ts=PRE_sync_x_2_y(TTL_x,TTL_y,x_name,y_name,sync_name,sync_dir);
+   sync_ts=PRE_sync_x_2_y(TTL_x,TTL_y,x_name,y_name,sync_name,sync_dir);
     p.sync.bsp_ts_for_sync_with_aud_other=sync_ts.Y;
     p.sync.aud_other_ts_for_sync_with_bsp=sync_ts.X;
 end
