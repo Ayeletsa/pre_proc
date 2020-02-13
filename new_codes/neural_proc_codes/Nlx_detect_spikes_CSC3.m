@@ -565,10 +565,10 @@ for run_i=1:length(use_neg_thr_vec)
         filename_out = fullfile(dir_OUT,strrep(NTT_filename,'.NTT','_artifacts_clusters'));
         saveas(gcf, filename_out, 'tif')
         close(gcf)
-        %% conver ts if needed to sync to BSP:
-        if strcmp(p.sync_to,'bsp')
-           Timestamps=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, Timestamps*1e3, 'linear','extrap')/1e3; 
-        end
+        %% convert ts if needed to sync to BSP:
+%         if strcmp(p.sync_to,'bsp')
+%            Timestamps=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, Timestamps*1e3, 'linear','extrap')/1e3; 
+%         end
         %% save artifacts in NTT file
         if is_save_artifacts
             filename_out = fullfile(dir_OUT,strrep(NTT_filename,'.NTT','_with_artifacts.NTT'));
