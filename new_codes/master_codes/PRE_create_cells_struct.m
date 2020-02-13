@@ -46,10 +46,15 @@ for ii_cell = 1:length(C)
     ExtractionMode = 1 ; % Mode 1 = "Extract All"
     ExtractionModeArray = [] ; % Will read all the data
     
-    [Timestamps_usec, ChanNum, CellNumbersSpikeSorting, NumValidSamples, Samples, NlxHeader] = ...
+    [Timestamps_usec_all, ChanNum, CellNumbersSpikeSorting, NumValidSamples, Samples, NlxHeader] = ...
         Nlx2MatSpike( spike_TT_file, FieldSelection, 1, ExtractionMode, ExtractionModeArray ) ;
     %Take only relevant spikes for cell
-    Timestamps_usec=Timestamps_usec(CellNumbersSpikeSorting==cell_id);
+    if strcmp(p.sync_to,'bsp')
+        Timestamps_usec_sync=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, Timestamps_usec_all*1e3, 'linear','extrap');
+    else
+        Timestamps_usec_sync=Timestamps_usec_all;
+    end
+    Timestamps_usec=Timestamps_usec_sync(CellNumbersSpikeSorting==cell_id);
     Samples=Samples(:,:,CellNumbersSpikeSorting==cell_id);
     
     %% 2. fit timestamps to bsp
@@ -74,7 +79,9 @@ for ii_cell = 1:length(C)
   
     
     [all_spike_ts,all_spike_samples] = Nlx2MatSpike(spike_TT_file, [1 0 0 0 1], 0, 1, []);
-    
+    if strcmp(p.sync_to,'bsp')
+        all_spike_ts=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, all_spike_ts*1e3, 'linear','extrap');
+    end
     
     % Maya's way to compute cluster quality (for test)
     % %         ind = [];
@@ -102,7 +109,7 @@ for ii_cell = 1:length(C)
     %--------------------------------------------------------------
     % TODO: change names of params if changed in P
     cell_struct.cell_info=C(ii_cell);
-    cell_struct.cell_info.TT_depth=p.depth(C(ii_cell).TT);
+    %cell_struct.cell_info.TT_depth=p.depth(C(ii_cell).TT);
     cell_struct.cell_info.cells_nearby=C(ii_cell).cells_nearby;
     cell_struct.cell_info.brain_area=C(ii_cell).brain_area;
     cell_struct.cell_info.relevant_timestamps_for_cell=start_end_ts;
