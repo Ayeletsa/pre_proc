@@ -13,15 +13,21 @@ if ~exist(file_name,'file')
     end
     %2. read the data
     if p.Audio_dir_self~=0
-    Filename=fullfile(self_dir,'audio.ncs');
-    [signal, ts, fs] = Nlx_csc_read(Filename,[]);
-    p.Aud.self_signal=signal;
-    % sync:
-    if strcmp(p.sync_to,'bsp')
-        ts=interp1(p.sync.aud_self_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_aud_self, ts*1e3, 'linear','extrap');
-    end
-    p.Aud.self_ts=ts;
-    p.Aud.fs=fs;
+        Filename=fullfile(self_dir,'audio.ncs');
+        [signal, ts, fs] = Nlx_csc_read(Filename,[]);
+        p.Aud.self_signal=signal;
+        % sync:
+        if strcmp(p.sync_to,'bsp')
+            ts=interp1(p.sync.aud_self_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_aud_self, ts, 'linear','extrap')/1e3;
+        end
+        if strcmp(p.sync_to,'bsp') && ~isempty(p.S)
+            start_time = num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.start_time], 'linear','extrap'))/1e3;
+            end_time = num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.end_time], 'linear','extrap'))/1e3;
+            [p.S.start_time]=start_time{:};
+            [p.S.end_time]=end_time{:};
+        end
+        p.Aud.self_ts=ts;
+        p.Aud.fs=fs;
     end
     if p.Audio_dir_other~=0
         Filename=fullfile(other_dir,'audio.ncs');
@@ -34,10 +40,10 @@ if ~exist(file_name,'file')
         p.Aud.fs=fs;
     end
     
-%     % 3. sync to bsp
-%     p.Aud.self_ts=PRE_sync_aud_2_bsp(p,self_dir,p.Aud.self_ts)/1e3;
-%     p.Aud.other_ts=PRE_sync_aud_2_bsp(p,other_dir,p.Aud.other_ts)/1e3;
-%     
+    %     % 3. sync to bsp
+    %     p.Aud.self_ts=PRE_sync_aud_2_bsp(p,self_dir,p.Aud.self_ts)/1e3;
+    %     p.Aud.other_ts=PRE_sync_aud_2_bsp(p,other_dir,p.Aud.other_ts)/1e3;
+    %
     
     
     %     %3. sync to nlg
