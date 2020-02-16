@@ -20,3 +20,4 @@ for ii=1:length(s)
         
     end
 end
+p.bsp_data=new;
