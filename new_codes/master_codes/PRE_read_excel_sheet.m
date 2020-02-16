@@ -54,7 +54,7 @@ for i=1:length(s)
     % deal with session related fields
     
     session_index = 0;
-    nsessions=cell2mat(raw(2,strcmp(field_names,'nsessions')));
+    nsessions=cell2mat(raw(end,strcmp(field_names,'nsessions')));%% NEED TO CHANGE!!!
     for session=1:nsessions
         session_index = session_index+1;
         
