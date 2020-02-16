@@ -56,7 +56,13 @@ for ii_cell = 1:length(C)
     end
     Timestamps_usec=Timestamps_usec_sync(CellNumbersSpikeSorting==cell_id);
     Samples=Samples(:,:,CellNumbersSpikeSorting==cell_id);
-    
+    %% sync nlg events if needed:
+if strcmp(p.sync_to,'bsp') && ~isempty(p.S)
+    start_time = num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.start_time], 'linear','extrap'))/1e3;
+    end_time = num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.end_time], 'linear','extrap'))/1e3;
+    [p.S.start_time]=start_time{:};
+    [p.S.end_time]=end_time{:};
+end
     %% 2. fit timestamps to bsp
     
 %     %a. for spikes
@@ -102,7 +108,7 @@ for ii_cell = 1:length(C)
         for t_i=1:length(ts_vec)-1
             relevant_ind_all=find(all_spike_ts>=ts_vec(t_i) & all_spike_ts>=ts_vec(t_i+1));
             relevant_ind_cell=find(Timestamps_usec>=ts_vec(t_i) & Timestamps_usec>=ts_vec(t_i+1));
-            if ~isempty(relevant_ind_cell)
+            if ~isempty(relevant_ind_cell)& length(relevant_ind_all)>1
             [L_Ratio(t_i),Isolation_dis(t_i)] = cluster_quality(all_spike_samples(:,:,relevant_ind_all),all_spike_ts(relevant_ind_all),Timestamps_usec(relevant_ind_cell));
             end
         end
