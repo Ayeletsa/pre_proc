@@ -106,9 +106,10 @@ end
             ts_vec(end+1)=all_spike_ts(end);
         end
         for t_i=1:length(ts_vec)-1
+            t_i
             relevant_ind_all=find(all_spike_ts>=ts_vec(t_i) & all_spike_ts>=ts_vec(t_i+1));
             relevant_ind_cell=find(Timestamps_usec>=ts_vec(t_i) & Timestamps_usec>=ts_vec(t_i+1));
-            if ~isempty(relevant_ind_cell)& length(relevant_ind_all)>1
+            if ~isempty(relevant_ind_cell)& length(relevant_ind_all)>1 & length(relevant_ind_cell)>8
             [L_Ratio(t_i),Isolation_dis(t_i)] = cluster_quality(all_spike_samples(:,:,relevant_ind_all),all_spike_ts(relevant_ind_all),Timestamps_usec(relevant_ind_cell));
             end
         end
