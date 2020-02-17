@@ -58,8 +58,8 @@ for ii_cell = 1:length(C)
     Samples=Samples(:,:,CellNumbersSpikeSorting==cell_id);
     %% sync nlg events if needed:
 if strcmp(p.sync_to,'bsp') && ~isempty(p.S)
-    start_time = num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.start_time], 'linear','extrap'))/1e3;
-    end_time = num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.end_time], 'linear','extrap'))/1e3;
+    start_time = num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.start_time], 'linear','extrap')./1e3);
+    end_time = num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.end_time], 'linear','extrap')./1e3);
     [p.S.start_time]=start_time{:};
     [p.S.end_time]=end_time{:};
 end
