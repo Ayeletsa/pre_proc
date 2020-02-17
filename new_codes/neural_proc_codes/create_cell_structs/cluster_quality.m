@@ -7,7 +7,7 @@ end
 num_spikes_cluster = length(cluster_spikes_ts);
 num_spikes_noise = length(all_spikes_ts) - num_spikes_cluster;
 
-
+    
 %% get feature space
 all_spikes_samples = permute(all_spikes_samples,[3,1,2]); %Mx32x4
 [nSpikes, nSamp, nch] = size(all_spikes_samples);
