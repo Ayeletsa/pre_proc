@@ -46,17 +46,17 @@ sync_jump_ts=[];
 if ~isempty(sync_jump_ts)
     ti = [-inf sync_jump_ts inf];
     ti = [ti(1:end-1); ti(2:end)]';
-    [~, IX_per_ti] = get_data_in_ti(matching_TTL_X, ti);
+    [~, IX_per_ti] = get_data_in_ti(matching_TTL_Y, ti);
 
     new_ttl_X = [];
     new_ttl_Y = [];
     for ii_jump = 1:length(sync_jump_ts)
         TTL_IX_before = IX_per_ti{ii_jump};
         TTL_IX_after  = IX_per_ti{ii_jump+1};
-        before_jump_X_ts = sync_jump_ts(ii_jump) - 1;
-        after_jump_X_ts  = sync_jump_ts(ii_jump) + 1;
-        before_jump_Y_ts = interp1(matching_TTL_X(TTL_IX_before), matching_TTL_Y(TTL_IX_before), before_jump_X_ts, 'linear','extrap');
-        after_jump_Y_ts  = interp1(matching_TTL_X(TTL_IX_after ), matching_TTL_Y(TTL_IX_after ), after_jump_X_ts,  'linear','extrap');
+        before_jump_Y_ts = sync_jump_ts(ii_jump) - 1;
+        after_jump_Y_ts  = sync_jump_ts(ii_jump) + 1;
+        before_jump_X_ts = interp1(matching_TTL_Y(TTL_IX_before), matching_TTL_X(TTL_IX_before), before_jump_Y_ts, 'linear','extrap');
+        after_jump_X_ts  = interp1(matching_TTL_Y(TTL_IX_after ), matching_TTL_X(TTL_IX_after ), after_jump_Y_ts,  'linear','extrap');
         new_ttl_X = [new_ttl_X before_jump_X_ts after_jump_X_ts];
         new_ttl_Y = [new_ttl_Y before_jump_Y_ts after_jump_Y_ts];
     end
