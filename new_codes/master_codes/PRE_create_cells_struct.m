@@ -110,11 +110,11 @@ end
             relevant_ind_all=find(all_spike_ts>=ts_vec(t_i) & all_spike_ts>=ts_vec(t_i+1));
             relevant_ind_cell=find(Timestamps_usec>=ts_vec(t_i) & Timestamps_usec>=ts_vec(t_i+1));
             if ~isempty(relevant_ind_cell)& length(relevant_ind_all)>1 & length(relevant_ind_cell)>8
-            [L_Ratio(t_i),Isolation_dis(t_i)] = cluster_quality(all_spike_samples(:,:,relevant_ind_all),all_spike_ts(relevant_ind_all),Timestamps_usec(relevant_ind_cell));
+            [L_Ratio_per_x_min(t_i),Isolation_dis_per_x_min(t_i)] = cluster_quality(all_spike_samples(:,:,relevant_ind_all),all_spike_ts(relevant_ind_all),Timestamps_usec(relevant_ind_cell));
             end
         end
-        L_Ratio=mean(L_Ratio);
-        Isolation_dis=mean(Isolation_dis);
+        L_Ratio=nanmean(L_Ratio_per_x_min);
+        Isolation_dis=nanmean(Isolation_dis_per_x_min);
     end
     %% find relevant timestamps based on cluster stability in the spike sorting
     start_ts=C(ii_cell).start;
