@@ -33,10 +33,9 @@ for ii_rec = 1 : length(day_rows)
         % 3. filter for spikes and LFP:
         % ------------------------------
         if p.microdrive==64
-            PRE_filter_CSCs_64_ch(p)
+           PRE_filter_CSCs_64_ch(p)
         else
-                    PRE_filter_CSCs(p) %note this is not synced!
-
+            PRE_filter_CSCs(p) %note this is not synced!
         end
        
         % 4. detect spikes:
@@ -46,7 +45,6 @@ for ii_rec = 1 : length(day_rows)
         end
         % 5. extract BSP data:
         % ------------------------------
-
         p = BSP_PRE_PROC_data (p); %TO DO -  take parameters to the param_in script
          
       
