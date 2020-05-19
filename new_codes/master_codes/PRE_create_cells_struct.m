@@ -46,7 +46,7 @@ for ii_cell = 1:length(C)
     ExtractionMode = 1 ; % Mode 1 = "Extract All"
     ExtractionModeArray = [] ; % Will read all the data
     
-    [Timestamps_usec_all, ChanNum, CellNumbersSpikeSorting, NumValidSamples, Samples, NlxHeader] = ...
+    [Timestamps_usec_all, ChanNum, CellNumbersSpikeSorting, NumValidSamples, Samples_all, NlxHeader] = ...
         Nlx2MatSpike( spike_TT_file, FieldSelection, 1, ExtractionMode, ExtractionModeArray ) ;
     %Take only relevant spikes for cell
     if strcmp(p.sync_to,'bsp')
@@ -55,7 +55,9 @@ for ii_cell = 1:length(C)
         Timestamps_usec_sync=Timestamps_usec_all;
     end
     Timestamps_usec=Timestamps_usec_sync(CellNumbersSpikeSorting==cell_id);
-    Samples=Samples(:,:,CellNumbersSpikeSorting==cell_id);
+    Samples=Samples_all(:,:,CellNumbersSpikeSorting==cell_id);
+    all_spike_ts=Timestamps_usec_sync;
+    all_spike_samples=Samples_all;
     %% sync nlg events if needed:
 if strcmp(p.sync_to,'bsp') && ~isempty(p.S)
     start_time = num2cell(interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, [p.S.start_time], 'linear','extrap')./1e3);
@@ -84,10 +86,10 @@ end
     L_Ratio = 0; Isolation_dis = 0;
   
     
-    [all_spike_ts,all_spike_samples] = Nlx2MatSpike(spike_TT_file, [1 0 0 0 1], 0, 1, []);
-    if strcmp(p.sync_to,'bsp')
-        all_spike_ts=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, all_spike_ts, 'linear','extrap')/1e3;
-    end
+%     [all_spike_ts,all_spike_samples] = Nlx2MatSpike(spike_TT_file, [1 0 0 0 1], 0, 1, []);
+%     if strcmp(p.sync_to,'bsp')
+%         all_spike_ts=interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, all_spike_ts, 'linear','extrap')/1e3;
+%     end
     
     % Maya's way to compute cluster quality (for test)
     % %         ind = [];
@@ -101,32 +103,42 @@ end
     [L_Ratio,Isolation_dis] = cluster_quality(all_spike_samples,all_spike_ts,Timestamps_usec);
     else
         us_iso_dis=isolation_distance_in_min*60*1e6;
-        ts_vec=all_spike_ts(1):us_iso_dis:all_spike_ts(end);
-        if ts_vec(end)~=all_spike_ts(end)
-            ts_vec(end+1)=all_spike_ts(end);
+        ts_vec=Timestamps_usec(1):us_iso_dis:Timestamps_usec(end);
+        if ts_vec(end)~=Timestamps_usec(end)
+            ts_vec(end+1)=Timestamps_usec(end);
         end
         for t_i=1:length(ts_vec)-1
             
             relevant_ind_all=find(all_spike_ts>=ts_vec(t_i) & all_spike_ts>=ts_vec(t_i+1));
             relevant_ind_cell=find(Timestamps_usec>=ts_vec(t_i) & Timestamps_usec>=ts_vec(t_i+1));
-            if ~isempty(relevant_ind_cell)& length(relevant_ind_all)>1 & length(relevant_ind_cell)>8
+            if  length(relevant_ind_all)>1 & length(relevant_ind_cell)>8
             [L_Ratio_per_x_min(t_i),Isolation_dis_per_x_min(t_i)] = cluster_quality(all_spike_samples(:,:,relevant_ind_all),all_spike_ts(relevant_ind_all),Timestamps_usec(relevant_ind_cell));
+            else
+                L_Ratio_per_x_min(t_i)=nan;
+                Isolation_dis_per_x_min(t_i)=nan;
             end
         end
         L_Ratio=nanmean(L_Ratio_per_x_min);
         Isolation_dis=nanmean(Isolation_dis_per_x_min);
     end
     %% find relevant timestamps based on cluster stability in the spike sorting
-    start_ts=C(ii_cell).start;
-    if isempty(start_ts)
-        start_ts=p.S(1).start_time;      
-    end
-    end_ts=C(ii_cell).end;
-    if isempty(end_ts)
-        end_ts=p.S(3).end_time;
-    end
+%     start_ts=C(ii_cell).start;
+%     if isempty(start_ts)
+%         start_ts=p.S(1).start_time;      
+%     end
+%     end_ts=C(ii_cell).end;
+%     if isempty(end_ts)
+%         end_ts=p.S(3).end_time;
+%     end
+%     
+    start_end_ts=[Timestamps_usec(1) Timestamps_usec(end)];
     
-    start_end_ts=[start_ts end_ts];
+%     % sync to bsp if needed:
+%     if strcmp(p.sync_to,'bsp') && ~isempty(start_end_ts)
+%         
+%         start_end_ts = interp1(p.sync.nlg_ts_for_sync_with_bsp,p.sync.bsp_ts_for_sync_with_nlg, start_end_ts, 'linear','extrap')./1e3;
+%         
+%     end
     %% 4.add all important data to cell struct
     
     %a. cell information:
