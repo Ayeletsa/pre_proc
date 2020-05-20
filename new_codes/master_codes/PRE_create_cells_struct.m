@@ -17,7 +17,12 @@ for ii_cell = 1:length(C)
     main_dir = p.path_day_dir;
     date = char (regexp (main_dir,'\d{8}','match'));
     data_out_dir = p.path_dataout;
+%       % temp!!!
+%       p.sync_to='nlg';
+%     p.path_dataout='L:\Data\2batproj\Data_Nlg_Proc\';
     main_dir_out = [p.path_dataout,'\',p.year_bat_path,'\',date];
+  
+    
     dir_sorting = fullfile(main_dir_out,'\spike_sorting\');
 
     %% 1. load spike file:
@@ -99,8 +104,10 @@ end
     % %         Fet = Create_FeatureSpace(permute(all_spike_samples,[3,2,1]));
     % %         [CluSep, m] = Cluster_Quality_maya(Fet, ind);
     if isolation_distance_in_min==0
-         
-    [L_Ratio,Isolation_dis] = cluster_quality(all_spike_samples,all_spike_ts,Timestamps_usec);
+        IX=find(CellNumbersSpikeSorting==cell_id);
+         [L_Ratio(t_i),Isolation_dis(t_i),~] = cell_calc_cluster_quality(Samples_all,IX);
+
+   % [L_Ratio,Isolation_dis] = cluster_quality(all_spike_samples,all_spike_ts,Timestamps_usec);
     else
         us_iso_dis=isolation_distance_in_min*60*1e6;
         ts_vec=Timestamps_usec(1):us_iso_dis:Timestamps_usec(end);
@@ -109,10 +116,18 @@ end
         end
         for t_i=1:length(ts_vec)-1
             
-            relevant_ind_all=find(all_spike_ts>=ts_vec(t_i) & all_spike_ts>=ts_vec(t_i+1));
-            relevant_ind_cell=find(Timestamps_usec>=ts_vec(t_i) & Timestamps_usec>=ts_vec(t_i+1));
+            relevant_ind_all=find(all_spike_ts>=ts_vec(t_i) & all_spike_ts<=ts_vec(t_i+1));
+            relevant_ind_cell=find(Timestamps_usec>=ts_vec(t_i) & Timestamps_usec<=ts_vec(t_i+1));
             if  length(relevant_ind_all)>1 & length(relevant_ind_cell)>8
-            [L_Ratio_per_x_min(t_i),Isolation_dis_per_x_min(t_i)] = cluster_quality(all_spike_samples(:,:,relevant_ind_all),all_spike_ts(relevant_ind_all),Timestamps_usec(relevant_ind_cell));
+                
+                Samples_seg_IX = all_spike_ts>ts_vec(t_i) & all_spike_ts<ts_vec(t_i+1);
+                Samples_seg = all_spike_samples(:,:,Samples_seg_IX);
+                CellNumbers_seg = CellNumbersSpikeSorting(Samples_seg_IX);
+                % get the IX of the time segment samples which are from our unit
+                IX = find(  CellNumbers_seg == cell_id );
+               [L_Ratio_per_x_min(t_i),Isolation_dis_per_x_min(t_i),~] = cell_calc_cluster_quality(Samples_seg,IX);
+
+           % [L_Ratio_per_x_min(t_i),Isolation_dis_per_x_min(t_i)] = cluster_quality(all_spike_samples(:,:,relevant_ind_all),all_spike_ts(relevant_ind_all),Timestamps_usec(relevant_ind_cell));
             else
                 L_Ratio_per_x_min(t_i)=nan;
                 Isolation_dis_per_x_min(t_i)=nan;
