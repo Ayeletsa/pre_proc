@@ -33,7 +33,8 @@ for ii_cell = 1:length(C)
     num_ver=[];
     if length(spike_TT_folder)>1
         for i=1:length(spike_TT_folder)
-            num_ver_str=regexp(spike_TT_folder(i).name,['\w*_TT',num2str(TT),'-0(\w+).NTT'],'tokens');
+            num_ver_str=regexp(spike_TT_folder(i).name,['\w*_TT',num2str(TT),'-(\w+).NTT'],'tokens');
+
             if ~isempty(num_ver_str)
                 num_ver(i)=str2num(cell2mat(num_ver_str{:}));
             end
